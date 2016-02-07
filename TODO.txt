@@ -1,0 +1,19 @@
+pdb:
+
+- Convert hooks into event emitter services.
+- Document events.
+- Caching strategy.
+- Capture component configuration field definitions (yaml'ed form API?).
+- Determine incompatibility strategy:
+  - By default let as many frameworks as are enabled all be mixed.
+  - Have some kind of hook to allow framework modules to declare incompatibility
+  - Never allow mixing of incompatible frameworks.
+
+pdb_ng2:
+
+- Convert hook implementations into event subscribers.
+- You cannot currently place the same component on the page multiple times.
+
+pdb_react:
+
+- Needs a lot of work.
