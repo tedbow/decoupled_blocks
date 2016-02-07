@@ -50,3 +50,15 @@ function pdb_ng2_pdb_libraries($component, $libraries) {
   }
   return $libraries;
 }
+
+/**
+ * Implements hook_pdb_presentations().
+ *
+ * Specify our custom drupalSettings for ng2 blocks.
+ */
+function pdb_ng2_pdb_presentations() {
+  $presentations = array(
+    'ng2' => 'Angular 2'
+  );
+  return $presentations;
+}

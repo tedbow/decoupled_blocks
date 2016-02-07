@@ -5,15 +5,17 @@
  * dependent on the panels module being on.
  */
 function pdb_form_page_variant_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  $options = array(
+  $presentations = array(
     'none' => 'None',
   );
-  \Drupal::moduleHandler()->alter('pdb_presentations_alter', $options);
+  $overrides = \Drupal::moduleHandler()->invokeAll('pdb_presentations', $presentations);
+
+  $presentations +=  $overrides;
 
   $form['presentation'] = array(
     '#title' => t('Presentation'),
     '#type' => 'select',
-    '#options' => $options,
+    '#options' => $presentations,
     '#weight' => 0,
   );
 
