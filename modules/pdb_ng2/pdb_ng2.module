@@ -9,7 +9,10 @@ function pdb_ng2_pdb_markup_override($component, $return) {
   $info = $component['info'];
   // Only override if presentation if ng2.
   if ($info['presentation'] == 'ng2') {
-    $return = '<' . $info['machine_name'] . '></' . $info['machine_name'] . '>';
+    // @TODO Find a better place for the stupid <app></app>... this
+    // will add it for every block which is dumb. Ultimately we don't want
+    // to need it at all.
+    $return['ng2'] = '<app></app><' . $info['machine_name'] . '></' . $info['machine_name'] . '>';
   }
   return $return;
 }

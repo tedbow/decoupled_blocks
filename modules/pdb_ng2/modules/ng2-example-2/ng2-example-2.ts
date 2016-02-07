@@ -2,7 +2,7 @@ import {Component} from 'angular2/core';
 import {FORM_DIRECTIVES} from 'angular2/common';
 
 var path = drupalSettings.apps['ng2-example-2']['uri'] + "/ng2-example-2.html";
-console.log(path);
+
 @Component({
     selector: 'ng2-example-2',
     templateUrl: path,

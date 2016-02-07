@@ -26,11 +26,8 @@ class PdbBlock extends BlockBase {
     $attached = $this->getDerivativeAttachments($component);
 
     return array(
-      // @TODO Find a better place for the stupid <app></app>... this
-      // will add it for every block which is dumb. Ultimately we don't want
-      // to need it at all.
-      '#markup' => '<app></app>' . $markup,
-      '#allowed_tags' => array('app', $name),
+      '#markup' => $markup,
+      '#allowed_tags' => array('div', 'app', $name),
       // What gets attached should depend not just on framework module enabled,
       // but also the one currently selected for a panel variant .
       '#attached' => $attached,
@@ -48,6 +45,9 @@ class PdbBlock extends BlockBase {
 
     // Get any necessary drupalSettings and add them to #attached.
     $return['drupalSettings'] = $this->getDerivativeSettings($component);
+
+    // In some cases we may need to attach directly to html_head.
+    $return['html_head'] = $this->getDerivativeHtmlHead($component);
 
     return $return;
   }
@@ -83,24 +83,42 @@ class PdbBlock extends BlockBase {
   }
 
   /**
+   * Put together any html_head attachments.
+   */
+  public function getDerivativeHtmlHead($component) {
+    // @TODO: This needs to be an event dispatcher so framework modules can
+    // subscribe to it and add their stuff. Using antiquated hooks for now.
+    $settings = array();
+
+    $override = \Drupal::service('module_handler')->invokeAll('pdb_html_head', array($component, $settings));
+
+    $settings += $override;
+
+    return $settings;
+  }
+
+  /**
    * What we render server side, most likely to be taken over by client.
    */
   public function getDerivativeMarkup($component) {
     // @TODO: This needs to be an event dispatcher so framework modules can
     // subscribe to it and add their stuff. Using antiquated hooks for now.
-    $return = 'This is default content';
+    $markup = array();
+    $markup['default'] = 'This is default content';
+    $key = $component['info']['presentation'];
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdb_markup_override', array($component, $return));
+    $override = \Drupal::service('module_handler')->invokeAll('pdb_markup_override', array($component, $markup));
 
-    if (!empty($override) && count($override) === 1) {
-      $return = array_pop($override);
+    if (!empty($override) && isset($override[$key])) {
+      $markup = $override[$key];
     }
     // If we've got multiple successful overrides, what do we do?
     else if (!empty($override)) {
       // Throw an error at least, we're in bat country.
+      drupal_set_message('we are in bat country', 'error');
     }
 
-    return $return;
+    return $markup;
   }
 
   /**
