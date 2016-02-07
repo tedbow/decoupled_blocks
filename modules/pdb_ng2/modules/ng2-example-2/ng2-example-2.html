@@ -1,0 +1,11 @@
+<h1>Two-way binding in action</h1>
+
+<p>Foo: <input [(ngModel)]="foo"></p>
+<p>Foo: <input [(ngModel)]="foo"></p>
+<p>My foo value is: {{foo}}</p>
+
+<h2>The same, but without syntax sugar</h2>
+
+<p>Bar: <input bind-ngModel="bar" on-ngModelChange="bar=$event"></p>
+<p>Bar: <input bind-ngModel="bar" on-ngModelChange="bar=$event"></p>
+<p>The bar value is: {{bar}}</p>
