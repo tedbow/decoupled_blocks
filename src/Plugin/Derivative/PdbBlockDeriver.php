@@ -11,7 +11,6 @@ use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\pdb\Plugin\Extension\PdbExtensionDiscovery;
-use Drupal\Core\Extension\InfoParser;
 
 /**
  * Provides a deriver for pdb blocks.
@@ -91,8 +90,6 @@ class PdbBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
 
       \Drupal::moduleHandler()->alter('component_info', $components[$key]->info, $components[$key]);
     }
-
-    dpm($components, 'final components');
 
     return $components;
   }

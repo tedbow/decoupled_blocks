@@ -1,7 +1,7 @@
 name: NG2 Example
-machine_name: ng2-example
+machine_name: ng2-example-1
 type: pdb
-description: 'NG 2 Example Component'
+description: 'NG 2 Example Component 1'
 package: NG2
 version: '1.0.0'
 core: '8.x'
