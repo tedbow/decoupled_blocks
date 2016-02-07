@@ -1,0 +1,16 @@
+name: React Example
+machine_name: react-example-1
+type: pdb
+description: 'React Example Component 1'
+package: React
+version: '1.0.0'
+core: '8.x'
+module_status: active
+presentation: react
+add_js:
+  header:
+  footer:
+add_css:
+  header:
+  footer:
+shared:
