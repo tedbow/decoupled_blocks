@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Adding our frameworks to the Panels variant form... this should really be
+ * dependent on the panels module being on.
+ */
+function pdp_form_page_variant_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  dpm($form, 'form id');
+  $options = array(
+    'none' => 'None',
+  );
+  \Drupal::moduleHandler()->alter('pdp_presentations_alter', $options);
+
+  $form['presentation'] = array(
+    '#title' => t('Presentation'),
+    '#type' => 'select',
+    '#options' => $options,
+    '#weight' => 0,
+  );
+
+}

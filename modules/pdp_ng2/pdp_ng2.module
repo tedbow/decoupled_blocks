@@ -1,0 +1,6 @@
+<?php
+
+// Stuff n thangs.
+function pdp_ng2_pdp_presentations_alter(&$options) {
+  dpm($options, 'options to add to');
+}
