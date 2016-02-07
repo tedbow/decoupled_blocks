@@ -1,5 +1,5 @@
 <?php
-namespace Drupal\pdp\Plugin\Block;
+namespace Drupal\pdb\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,10 +10,10 @@ use Drupal\Core\Form\FormStateInterface;
  * @Block(
  *   id = "component_block",
  *   admin_label = @Translation("Component block"),
- *   deriver = "Drupal\pdp\Plugin\Derivative\PdpBlockDeriver"
+ *   deriver = "Drupal\pdb\Plugin\Derivative\PdbBlockDeriver"
  * )
  */
-class PdpBlock extends BlockBase {
+class PdbBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -60,7 +60,7 @@ class PdpBlock extends BlockBase {
     // subscribe to it and add their stuff. Using antiquated hooks for now.
     $libraries = array();
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdp_libraries', array($component, $libraries));
+    $override = \Drupal::service('module_handler')->invokeAll('pdb_libraries', array($component, $libraries));
 
     $libraries += $override;
 
@@ -75,7 +75,7 @@ class PdpBlock extends BlockBase {
     // subscribe to it and add their stuff. Using antiquated hooks for now.
     $settings = array();
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdp_settings', array($component, $settings));
+    $override = \Drupal::service('module_handler')->invokeAll('pdb_settings', array($component, $settings));
 
     $settings += $override;
 
@@ -90,7 +90,7 @@ class PdpBlock extends BlockBase {
     // subscribe to it and add their stuff. Using antiquated hooks for now.
     $return = 'This is default content';
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdp_markup_override', array($component, $return));
+    $override = \Drupal::service('module_handler')->invokeAll('pdb_markup_override', array($component, $return));
 
     if (!empty($override) && count($override) === 1) {
       $return = array_pop($override);

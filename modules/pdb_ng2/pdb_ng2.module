@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Implements hook_pdp_markup_override().
+ * Implements hook_pdb_markup_override().
  *
  * Specify our custom markup for ng2 blocks.
  */
-function pdp_ng2_pdp_markup_override($component, $return) {
+function pdb_ng2_pdb_markup_override($component, $return) {
   $info = $component['info'];
   // Only override if presentation if ng2.
   if ($info['presentation'] == 'ng2') {
@@ -15,11 +15,11 @@ function pdp_ng2_pdp_markup_override($component, $return) {
 }
 
 /**
- * Implements hook_pdp_settings().
+ * Implements hook_pdb_settings().
  *
  * Specify our custom drupalSettings for ng2 blocks.
  */
-function pdp_ng2_pdp_settings($component, $settings) {
+function pdb_ng2_pdb_settings($component, $settings) {
   $info = $component['info'];
   // Only override if presentation if ng2.
   if ($info['presentation'] == 'ng2') {
@@ -34,17 +34,17 @@ function pdp_ng2_pdp_settings($component, $settings) {
 }
 
 /**
- * Implements hook_pdp_libraries().
+ * Implements hook_pdb_libraries().
  *
  * Specify our custom library for ng2 blocks.
  */
-function pdp_ng2_pdp_libraries($component, $libraries) {
+function pdb_ng2_pdb_libraries($component, $libraries) {
   $info = $component['info'];
   // Only override if presentation if ng2.
   if ($info['presentation'] == 'ng2') {
-    if (!isset($libraries['pdp_ng2/angular2'])) {
+    if (!isset($libraries['pdb_ng2/angular2'])) {
       $libraries += array(
-        'pdp_ng2/angular2'
+        'pdb_ng2/angular2'
       );
     }
   }

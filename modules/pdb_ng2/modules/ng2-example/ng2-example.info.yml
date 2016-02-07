@@ -1,6 +1,6 @@
 name: NG2 Example
 machine_name: ng2-example
-type: pdp
+type: pdb
 description: 'NG 2 Example Component'
 package: NG2
 version: '1.0.0'

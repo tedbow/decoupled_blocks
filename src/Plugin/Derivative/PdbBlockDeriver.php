@@ -2,21 +2,21 @@
 
 /**
  * @file
- * Contains \Drupal\pdp\Plugin\Derivative\PdpBlockDeriver.
+ * Contains \Drupal\pdb\Plugin\Derivative\PdbBlockDeriver.
  */
 
-namespace Drupal\pdp\Plugin\Derivative;
+namespace Drupal\pdb\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\pdp\Plugin\Extension\PdpExtensionDiscovery;
+use Drupal\pdb\Plugin\Extension\PdbExtensionDiscovery;
 use Drupal\Core\Extension\InfoParser;
 
 /**
- * Provides a deriver for pdp blocks.
+ * Provides a deriver for pdb blocks.
  */
-class PdpBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
+class PdbBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
   /**
    * The base plugin ID.
    *
@@ -25,7 +25,7 @@ class PdpBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
   protected $basePluginId;
 
   /**
-   * Constructs a PdpBlockDeriver instance.
+   * Constructs a PdbBlockDeriver instance.
    */
   public function __construct($base_plugin_id) {
     $this->basePluginId = $base_plugin_id;
@@ -45,7 +45,7 @@ class PdpBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     // Get all custom blocks which should be rediscovered.
-    $components = $this->_pdp_rebuild_component_data();
+    $components = $this->_pdb_rebuild_component_data();
     foreach ($components as $block_id => $block_info) {
       $this->derivatives[$block_id] = $base_plugin_definition;
       $this->derivatives[$block_id]['info'] = $block_info->info;
@@ -65,12 +65,12 @@ class PdpBlockDeriver extends DeriverBase implements ContainerDeriverInterface {
    * @return \Drupal\Core\Extension\Extension[]
    *   An associative array of component information.
    */
-  private function _pdp_rebuild_component_data() {
+  private function _pdb_rebuild_component_data() {
 
-    $listing = new PdpExtensionDiscovery(\Drupal::root());
+    $listing = new PdbExtensionDiscovery(\Drupal::root());
 
     // Find components.
-    $components = $listing->scan('pdp');
+    $components = $listing->scan('pdb');
 
     // Set defaults for module info.
     $defaults = array(

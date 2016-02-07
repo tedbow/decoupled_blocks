@@ -3,7 +3,7 @@ import {bootstrap, BROWSER_PROVIDERS, BROWSER_APP_PROVIDERS} from 'angular2/plat
 
 import 'rxjs/add/operator/map';
 
-import {ScrollLoader} from 'modules/pdp/modules/pdp_ng2/assets/app/scroll-loader.ts';
+import {ScrollLoader} from 'modules/pdb/modules/pdb_ng2/assets/app/scroll-loader.ts';
 
 // The apps variable is an array containing the name of each angular module on
 // the page as the key and the path to the angular module as the value.

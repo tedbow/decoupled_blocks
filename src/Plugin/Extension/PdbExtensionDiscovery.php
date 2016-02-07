@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\pdp\Plugin\Extension\PdpExtensionDiscovery.
+ * Contains \Drupal\pdb\Plugin\Extension\PdbExtensionDiscovery.
  */
 
-namespace Drupal\pdp\Plugin\Extension;
+namespace Drupal\pdb\Plugin\Extension;
 
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\Core\Extension\Extension;
@@ -21,12 +21,12 @@ use Drupal\Core\Extension\Discovery\RecursiveExtensionFilterIterator;
  * to your settings.php.
  *
  */
-class PdpExtensionDiscovery extends ExtensionDiscovery {
+class PdbExtensionDiscovery extends ExtensionDiscovery {
 
   /**
    * Origin directory weight: Core.
    */
-  const PDP_SITES_ALL = 0;
+  const PDB_SITES_ALL = 0;
 
   /**
    * Discovers available extensions of a given type.
@@ -70,7 +70,7 @@ class PdpExtensionDiscovery extends ExtensionDiscovery {
   public function scan($type, $include_tests = NULL) {
 
     // Search the legacy sites/all directory.
-    $searchdirs[static::PDP_SITES_ALL] = 'modules/pdp';
+    $searchdirs[static::PDB_SITES_ALL] = 'modules/pdb';
 
     $files = array();
     foreach ($searchdirs as $dir) {
