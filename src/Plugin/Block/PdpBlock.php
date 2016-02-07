@@ -32,13 +32,13 @@ class PdpBlock extends BlockBase {
       '#markup' => '<app></app>' . $markup,
       '#allowed_tags' => array('app', $name),
       // What gets attached should depend not just on framework module enabled,
-      // but also the one currently selected for a variant.
+      // but also the one currently selected for a panel variant .
       '#attached' => $attached,
     );
   }
 
   /**
-   *
+   * Put together all attachments for this component.
    */
   public function getDerivativeAttachments($component) {
     $return = array();
@@ -53,46 +53,63 @@ class PdpBlock extends BlockBase {
   }
 
   /**
-   *
+   * Put together any libraries needed.
    */
   public function getDerivativeLibrary($component) {
-    // This needs to be a listener or hook or whatever.
-    return array(
-      'pdp_ng2/angular2'
-    );
+    // @TODO: This needs to be an event dispatcher so framework modules can
+    // subscribe to it and add their stuff. Using antiquated hooks for now.
+    $libraries = array();
+
+    $override = \Drupal::service('module_handler')->invokeAll('pdp_libraries', array($component, $libraries));
+
+    $libraries += $override;
+
+    return $libraries;
   }
 
   /**
-   *
+   * Put together any specific settings for exposing to the front end.
    */
   public function getDerivativeSettings($component) {
-    // This needs also to be a listener or hook or whatever.
-    return array(
-      'apps' => array(
-        $component['info']['machine_name'] => array(
-          'uri' => $component['info']['path'],
-        )
-      )
-    );
+    // @TODO: This needs to be an event dispatcher so framework modules can
+    // subscribe to it and add their stuff. Using antiquated hooks for now.
+    $settings = array();
+
+    $override = \Drupal::service('module_handler')->invokeAll('pdp_settings', array($component, $settings));
+
+    $settings += $override;
+
+    return $settings;
   }
 
   /**
-   *
+   * What we render server side, most likely to be taken over by client.
    */
   public function getDerivativeMarkup($component) {
-    // This must be framework-based.
-    $name = $this->getDerivativeId();
-    $return = '<' . $name . '></' . $name . '>';
+    // @TODO: This needs to be an event dispatcher so framework modules can
+    // subscribe to it and add their stuff. Using antiquated hooks for now.
+    $return = 'This is default content';
 
-    \Drupal::moduleHandler()->alter('pdp_markup_alter', $component, $return);
+    $override = \Drupal::service('module_handler')->invokeAll('pdp_markup_override', array($component, $return));
+
+    if (!empty($override) && count($override) === 1) {
+      $return = array_pop($override);
+    }
+    // If we've got multiple successful overrides, what do we do?
+    else if (!empty($override)) {
+      // Throw an error at least, we're in bat country.
+    }
 
     return $return;
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+    // @TODO: This is useless right now. In our original module we had a
+    // JSON-ified version of the form API passing necessary fields into Drupal.
+    // A similar approach is necessary.
     $form = parent::blockForm($form, $form_state);
 
     // Retrieve existing configuration for this block.
@@ -110,16 +127,16 @@ class PdpBlock extends BlockBase {
   /**
    * {@inheritdoc}
    */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    // Save our custom settings when the form is submitted.
-    $this->setConfigurationValue('example', $form_state->getValue('example'));
+  public function blockValidate($form, FormStateInterface $form_state) {
+    // Nothing yet.
   }
 
   /**
    * {@inheritdoc}
    */
-  public function blockValidate($form, FormStateInterface $form_state) {
-    // Nothing yet.
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    // Save our custom settings when the form is submitted.
+    $this->setConfigurationValue('example', $form_state->getValue('example'));
   }
 }
 ?>
