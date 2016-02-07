@@ -4,15 +4,19 @@ pdb:
 - Document events.
 - Caching strategy.
 - Capture component configuration field definitions (yaml'ed form API?).
+- Make add js and add css in yaml files work automatically.
+- Where do we source our library files? Can't live in the module I assume.
 - Determine incompatibility strategy:
   - By default let as many frameworks as are enabled all be mixed.
   - Have some kind of hook to allow framework modules to declare incompatibility
   - Never allow mixing of incompatible frameworks.
+- You cannot safely place the same component on the page multiple times:
+  - Add an instance id generator function on the Drupal side.
+  - Feed that out to drupalSettings for use wherever we need it client side.
 
 pdb_ng2:
 
 - Convert hook implementations into event subscribers.
-- You cannot currently place the same component on the page multiple times.
 
 pdb_react:
 
