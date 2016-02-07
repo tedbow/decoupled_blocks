@@ -24,7 +24,6 @@ export class ScrollLoader {
     constructor(elements, apps) {
         this.contentHeight = 0;
         this.elements = elements;
-        console.log('elements!!! ' + elements);
         this.elementObj = elements.reduce(function(obj, value, index) {
             obj[value] = index;
             return obj;
@@ -39,13 +38,10 @@ export class ScrollLoader {
      * components for any elements that are in the view port
      */
     initialise() {
-        console.log('initializing');
         let content = document.querySelector(".region-content");
 
         if (content) {
-            console.log('got content, walking dom');
             this.walkTheDom(content, this.nodes);
-            console.log('heres where we end up! ' + this.nodes);
             this.hydrateComponent(this.nodes, 0);
         }
     }
@@ -59,14 +55,11 @@ export class ScrollLoader {
      * @param index
      */
     hydrateComponent(nodes, index) {
-        console.log(nodes);
         // observer map and configuration
         let config = { attributes: false, childList: true, characterData: false, subtree: true };
         let $el = nodes[index] ? document.querySelector(nodes[index]) : null;
-        console.log($el);
 
         if ($el && this.elementInViewport($el) && $el.innerHTML.length === 0) {
-            console.info('we are in viewport');
             let vp = this.getViewPort();
             let clientRect = $el.getBoundingClientRect();
             this.contentHeight += clientRect.height;
@@ -86,7 +79,6 @@ export class ScrollLoader {
                 this.loadComponents([$el.localName]);
             }
         } else if (++index < nodes.length) {
-            console.log('well what now?');
             this.hydrateComponent(nodes, index);
         }
     }
@@ -100,7 +92,6 @@ export class ScrollLoader {
      * @returns {any}
      */
     walkTheDom(el, nodes) {
-        console.log(el);
         let children = el.children;
 
         if (children) {
@@ -115,10 +106,8 @@ export class ScrollLoader {
 
                     if (this.elementObj[elementName] >= 0) {
                         nodes.push(elementName);
-                        console.log('nodes pushed');
                         return nodes;
                     } else {
-                        console.log('nothing pushed');
                     }
                 }
             }
@@ -188,7 +177,6 @@ export class ScrollLoader {
     }
 
     loadComponents(elements) {
-        console.log('loading ' + elements);
         this.checkElements(elements);
     }
 
@@ -199,7 +187,6 @@ export class ScrollLoader {
      */
     bootstrapComponent(el, className) {
         let componentEntryPoint = drupalSettings.apps[el]['uri'] + "/" + el + ".ts";
-        console.log('our entry point: ' + componentEntryPoint);
         System.import(componentEntryPoint).then(function(components) {
             window.app.bootstrap(components[className]).then(function(bootstrappedComponent) {
                 this.unsubscribe(el);
@@ -238,7 +225,6 @@ export class ScrollLoader {
      */
     elementInViewport(el) {
         var rect = el.getBoundingClientRect();
-        console.log(rect);
         return (
             rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth)
         );
