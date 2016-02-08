@@ -3,8 +3,8 @@ react:
   js:
     assets/vendor/react/react.js: {}
     assets/vendor/react/react-dom.js: {}
-    assets/vendor/react/browser.min.js: {}
-    #modules/react-example-1/react-example-1.js: {}
+    # This needs to be fixed & removed.
+    modules/react-example-1/react-example-1.js: {}
   dependencies:
     - core/drupal
-    - core/drupalSetting
+    - core/drupalSettings
