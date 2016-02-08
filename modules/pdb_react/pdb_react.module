@@ -34,27 +34,6 @@ function pdb_react_pdb_settings($component, $settings) {
 }
 
 /**
- * Implements hook_pdb_html_head().
- *
- * Specify our custom drupalSettings for react blocks.
- */
-function pdb_react_pdb_html_head($component, $head) {
-  $info = $component['info'];
-  // Only override if presentation if react.
-  if ($info['presentation'] == 'react') {
-    $meta = array(
-      '#tag' => 'script',
-      '#attributes' => array(
-        'src' => $info['path'] . '/' . $info['machine_name'] .'.js',
-      ),
-      '#weight' => 1000,
-    );
-    $head[] = [$meta, $info['machine_name']];
-  }
-  return $head;
-}
-
-/**
  * Implements hook_pdb_libraries().
  *
  * Specify our custom library for react blocks.
@@ -65,7 +44,8 @@ function pdb_react_pdb_libraries($component, $libraries) {
   if ($info['presentation'] == 'react') {
     if (!isset($libraries['pdb_react/react'])) {
       $libraries += array(
-        'pdb_react/react'
+        'pdb_react/react',
+        'pdb_react/components',
       );
     }
   }
@@ -82,4 +62,26 @@ function pdb_react_pdb_presentations() {
     'react' => 'React'
   );
   return $presentations;
+}
+
+/**
+ * Implements hook_library_info_build().
+ */
+function pdb_react_library_info_build() {
+  $libraries = [];
+  // Add a library whose information changes depending on certain conditions.
+  $libraries['components'] = [
+    'version' => '1.0.0',
+    'dependencies' => [
+      'pdb_react/react',
+    ],
+  ];
+  // @TODO: How do we get components on the page from here?? This needs to be
+  // dynamic for a proper proof of concept.
+  $libraries['components'] += [
+    'js' => [
+      '/modules/pdb/modules/pdb_react/modules/react-example-1/react-example-1.js' => [],
+    ],
+  ];
+  return $libraries;
 }
