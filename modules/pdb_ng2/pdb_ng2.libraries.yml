@@ -1,11 +1,11 @@
 angular2:
   version: VERSION
   js:
-    assets/vendor/ng2/system.js: {}
-    assets/vendor/ng2/angular2.min.js: {}
-    assets/vendor/ng2/angular2-polyfills.js: {}
-    assets/vendor/ng2/http.min.js: {}
-    assets/vendor/ng2/Rx.js: {}
+    node_modules/system/system.js: {}
+    node_modules/angular2/bundles/angular2.min.js: {}
+    node_modules/angular2/bundles/angular2-polyfills.js: {}
+    node_modules/angular2/bundles/http.min.js: {}
+    node_modules/rxjs/Rx.js: {}
     assets/vendor/ng2/typescript.js: {}
     assets/app/systemConfig.js: {}
   dependencies:
