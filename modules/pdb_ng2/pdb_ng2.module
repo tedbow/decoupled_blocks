@@ -30,7 +30,7 @@ function pdb_ng2_pdb_settings($component, $settings) {
       $settings['apps'] = array();
     }
     $settings['apps'][$info['machine_name']] = array(
-      'uri' => $info['path']
+      'uri' => $info['path'],
     );
   }
   return $settings;
@@ -47,7 +47,7 @@ function pdb_ng2_pdb_libraries($component, $libraries) {
   if ($info['presentation'] == 'ng2') {
     if (!isset($libraries['pdb_ng2/angular2'])) {
       $libraries += array(
-        'pdb_ng2/angular2'
+        'pdb_ng2/angular2',
       );
     }
   }
@@ -61,7 +61,7 @@ function pdb_ng2_pdb_libraries($component, $libraries) {
  */
 function pdb_ng2_pdb_presentations() {
   $presentations = array(
-    'ng2' => 'Angular 2'
+    'ng2' => 'Angular 2',
   );
   return $presentations;
 }
