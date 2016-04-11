@@ -6,7 +6,7 @@ angular2:
     node_modules/angular2/bundles/angular2-polyfills.js: {}
     node_modules/angular2/bundles/http.min.js: {}
     node_modules/rxjs/Rx.js: {}
-    assets/vendor/ng2/typescript.js: {}
+    node_modules/typescript/lib/typescript.js: {}
     assets/app/systemConfig.js: {}
   dependencies:
     - core/drupal
