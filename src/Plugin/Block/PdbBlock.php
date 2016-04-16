@@ -1,8 +1,16 @@
 <?php
 namespace Drupal\pdb\Plugin\Block;
 
+
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+
+use Drupal\pdb\Event\Block\ContentEvent;
+use Drupal\pdb\Event\Block\PdbBlockEvents;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides a 'Component' block.
@@ -13,16 +21,37 @@ use Drupal\Core\Form\FormStateInterface;
  *   deriver = "Drupal\pdb\Plugin\Derivative\PdbBlockDeriver"
  * )
  */
-class PdbBlock extends BlockBase {
+class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  private $dispatcher;
+
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $dispatcher) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+    $this->dispatcher = $dispatcher;
+  }
+
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $dispatcher = $container->get('event_dispatcher');
+
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $dispatcher
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-
     $name = $this->getDerivativeId();
     $component = $this->getPluginDefinition();
-    $markup = $this->getDerivativeMarkup($component);
+    $markup = $this->getDerivativeMarkup($component, $this->getConfiguration());
     $attached = $this->getDerivativeAttachments($component);
 
     return array(
@@ -32,6 +61,33 @@ class PdbBlock extends BlockBase {
       // but also the one currently selected for a panel variant .
       '#attached' => $attached,
     );
+  }
+
+  /**
+   * What we render server side, most likely to be taken over by client.
+   */
+  public function getDerivativeMarkup($component, $configuration) {
+    $markup = array();
+    $markup['default'] = 'This is default content';
+    $key = $component['info']['presentation'];
+
+    $content_event = new ContentEvent($component, $configuration, $markup);
+
+    $this->dispatcher->dispatch(PdbBlockEvents::CONTENT, $content_event);
+
+    $derivative_markup = $content_event->getMarkup();
+
+    if (isset($derivative_markup[$key])) {
+      $markup = $derivative_markup[$key];
+    }
+    // If we've got multiple successful overrides, what do we do?
+    elseif (!empty($derivative_markup)) {
+      // Throw an error at least, we're in bat country.
+      drupal_set_message('we are in bat country', 'error');
+      $markup = $derivative_markup['default'];
+    }
+
+    return $markup;
   }
 
   /**
@@ -98,30 +154,6 @@ class PdbBlock extends BlockBase {
   }
 
   /**
-   * What we render server side, most likely to be taken over by client.
-   */
-  public function getDerivativeMarkup($component) {
-    // @TODO: This needs to be an event dispatcher so framework modules can
-    // subscribe to it and add their stuff. Using antiquated hooks for now.
-    $markup = array();
-    $markup['default'] = 'This is default content';
-    $key = $component['info']['presentation'];
-
-    $override = \Drupal::service('module_handler')->invokeAll('pdb_markup_override', array($component, $markup));
-
-    if (!empty($override) && isset($override[$key])) {
-      $markup = $override[$key];
-    }
-    // If we've got multiple successful overrides, what do we do?
-    else if (!empty($override)) {
-      // Throw an error at least, we're in bat country.
-      drupal_set_message('we are in bat country', 'error');
-    }
-
-    return $markup;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
@@ -157,4 +189,3 @@ class PdbBlock extends BlockBase {
     $this->setConfigurationValue('example', $form_state->getValue('example'));
   }
 }
-?>
