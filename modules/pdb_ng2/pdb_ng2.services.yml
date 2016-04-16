@@ -1,0 +1,10 @@
+services:
+  pdb_ng2.framework.initialize:
+    class: Drupal\pdb_ng2\EventSubscriber\Framework\InitializeSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  pdb_ng2.block.content:
+    class: Drupal\pdb_ng2\EventSubscriber\Block\ContentSubscriber
+    tags:
+      - { name: event_subscriber }
