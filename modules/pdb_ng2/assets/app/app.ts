@@ -1,27 +1,27 @@
-import {platform, Component} from 'angular2/core';
+import {platform, Component, PACKAGE_ROOT_URL} from 'angular2/core';
 import {bootstrap, BROWSER_PROVIDERS, BROWSER_APP_PROVIDERS} from 'angular2/platform/browser';
 
 import 'rxjs/add/operator/map';
 
-import {ScrollLoader} from 'modules/pdb/modules/pdb_ng2/assets/app/scroll-loader.ts';
+import {ScrollLoader} from 'modules/custom/pdb/modules/pdb_ng2/assets/classes/scroll-loader.ts';
+import {GlobalProviders} from 'modules/custom/pdb/modules/pdb_ng2/assets/classes/global-providers.ts';
 
-// The apps variable is an array containing the name of each angular module on
-// the page as the key and the path to the angular module as the value.
-var appkeys = Object.keys(drupalSettings.apps);
-var apps = drupalSettings.apps;
+var injectables = drupalSettings.ng2.global_injectables;
+var globalProviders = new GlobalProviders(injectables);
+var importPromises = globalProviders.importGlobalInjectables();
 
-@Component({
-    selector: "app",
-    template: '',
-    directives: []
-})
-class AppComponent extends ScrollLoader{
-    constructor() {
-        super(appkeys, apps);
-        this.initialise();
-    }
-}
-let app = platform(BROWSER_PROVIDERS).application([BROWSER_APP_PROVIDERS]);
+// Dynamically load all globally shared @Injectable services and pass as
+// providers into main app bootstrap.
+Promise.all(importPromises).then((globalServices) => {
+  // array of providers to pass into longform bootstrap to make @Injectable
+  // services shared globally.
+  var globalProvidersArray = globalProviders.createGlobalProvidersArray(globalServices);
 
-app.bootstrap(AppComponent);
-window.app = app;
+  // components contains metadata about all ng2 components on the page.
+  var components = drupalSettings.ng2.components;
+  // app is the main root component, using longform bootstrap to allow multiple
+  // components to be bootstrapped by ScrollLoader.
+  var app = platform(BROWSER_PROVIDERS).application([BROWSER_APP_PROVIDERS, ...globalProvidersArray]);
+  var loader = new ScrollLoader(app, components);
+  loader.initialize();
+});
