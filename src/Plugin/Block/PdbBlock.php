@@ -7,7 +7,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 use Drupal\pdb\Event\Block\ContentEvent;
+use Drupal\pdb\Event\Block\HtmlHeadEvent;
+use Drupal\pdb\Event\Block\LibraryEvent;
 use Drupal\pdb\Event\Block\PdbBlockEvents;
+use Drupal\pdb\Event\Block\SettingEvent;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -112,13 +115,15 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * Put together any libraries needed.
    */
   public function getDerivativeLibrary($component) {
-    // @TODO: This needs to be an event dispatcher so framework modules can
-    // subscribe to it and add their stuff. Using antiquated hooks for now.
     $libraries = array();
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdb_libraries', array($component, $libraries));
+    $library_event = new LibraryEvent($component, $libraries);
 
-    $libraries += $override;
+    $this->dispatcher->dispatch(PdbBlockEvents::LIBRARY, $library_event);
+
+    $derivative_libraries = $library_event->getLibraries();
+
+    $libraries += $derivative_libraries;
 
     return $libraries;
   }
@@ -127,13 +132,15 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * Put together any specific settings for exposing to the front end.
    */
   public function getDerivativeSettings($component) {
-    // @TODO: This needs to be an event dispatcher so framework modules can
-    // subscribe to it and add their stuff. Using antiquated hooks for now.
     $settings = array();
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdb_settings', array($component, $settings));
+    $setting_event = new SettingEvent($component, $settings);
 
-    $settings += $override;
+    $this->dispatcher->dispatch(PdbBlockEvents::SETTING, $setting_event);
+
+    $derivative_setting = $setting_event->getSettings();
+
+    $settings += $derivative_setting;
 
     return $settings;
   }
@@ -142,15 +149,17 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * Put together any html_head attachments.
    */
   public function getDerivativeHtmlHead($component) {
-    // @TODO: This needs to be an event dispatcher so framework modules can
-    // subscribe to it and add their stuff. Using antiquated hooks for now.
-    $settings = array();
+    $html_head = array();
 
-    $override = \Drupal::service('module_handler')->invokeAll('pdb_html_head', array($component, $settings));
+    $html_head_event = new HtmlHeadEvent($component, $html_head);
 
-    $settings += $override;
+    $this->dispatcher->dispatch(PdbBlockEvents::HTML_HEAD, $html_head_event);
 
-    return $settings;
+    $derivative_html_head = $html_head_event->getHtmlHead();
+
+    $html_head += $derivative_html_head;
+
+    return $html_head;
   }
 
   /**
@@ -188,4 +197,5 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
     // Save our custom settings when the form is submitted.
     $this->setConfigurationValue('example', $form_state->getValue('example'));
   }
+
 }

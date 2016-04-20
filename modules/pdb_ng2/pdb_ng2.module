@@ -1,24 +1,6 @@
 <?php
 
 /**
- * Implements hook_pdb_libraries().
- *
- * Specify our custom library for ng2 blocks.
- */
-function pdb_ng2_pdb_libraries($component, $libraries) {
-  $info = $component['info'];
-  // Only override if presentation if ng2.
-  if ($info['presentation'] == 'ng2') {
-    if (!isset($libraries['pdb_ng2/angular2'])) {
-      $libraries += array(
-        'pdb_ng2/angular2'
-      );
-    }
-  }
-  return $libraries;
-}
-
-/**
  * Implements hook_pdb_presentations().
  *
  * Specify our custom drupalSettings for ng2 blocks.

@@ -8,3 +8,13 @@ services:
     class: Drupal\pdb_ng2\EventSubscriber\Block\ContentSubscriber
     tags:
       - { name: event_subscriber }
+
+  pdb_ng2.block.library:
+    class: Drupal\pdb_ng2\EventSubscriber\Block\LibrarySubscriber
+    tags:
+      - { name: event_subscriber }
+
+  pdb_ng2.block.setting:
+    class: Drupal\pdb_ng2\EventSubscriber\Block\SettingSubscriber
+    tags:
+      - { name: event_subscriber }
