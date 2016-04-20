@@ -1,6 +1,4 @@
 /**
- * @author Shawn Stedman
- *
  * Load shared global services and inject as providers in main app bootstrap to
  * create one shared service instance between all components.
  */
