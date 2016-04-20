@@ -25,6 +25,11 @@ pdb_ng2:
 - Convert hook implementations into event subscribers.
 - Twig integration --> Bug Tobias Bosch about twig outputting ng2 templates work that already exists and figure out how
   that could be integrated into our components optionally.
+- Add acknowledgements to Jeff Lu and Shawn Stedman for their work in ng2 libraries.
+  - assets/app/app.ts
+  - assets/classes/global-providers.ts
+  - assets/classes/scroll-loader.ts
+  Should we add this in README.txt? or maybe in a specific README.txt for pdb_ng2?
 
 pdb_react:
 
