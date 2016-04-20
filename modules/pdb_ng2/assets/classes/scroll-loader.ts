@@ -1,5 +1,4 @@
 /**
- * Created by jefflu on 1/20/2016.
  * This is a generic concrete class for loading components.
  * - Manually load in components by providing an array of component elements.
  * - Autoload components on page load.
@@ -170,7 +169,7 @@ export class ScrollLoader {
    * @returns {boolean} - in viewport
    *
    * @see based on SO answer: http://stackoverflow.com/a/23234031/1774183
-   * DNA-339 - fixes firefox issue and also loads if any part of element is in
+   * Fixes firefox issue and also loads if any part of element is in
    * view. Returns elements not notInView (in viewport).
    */
   elementInViewport(el) {
