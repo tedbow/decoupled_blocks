@@ -19,15 +19,15 @@ class ContentSubscriber implements EventSubscriberInterface {
 
   public function onBlockContent(ContentEvent $event) {
     $component = $event->getComponent();
+    $configuration = $event->getConfiguration();
     $markup = $event->getMarkup();
 
     $info = $component['info'];
     // Only override if presentation if ng2.
     if ($info['presentation'] == 'ng2') {
-      // @TODO Find a better place for the stupid <app></app>... this
-      // will add it for every block which is dumb. Ultimately we don't want
-      // to need it at all.
-      $markup['ng2'] = '<app></app><' . $info['machine_name'] . '></' . $info['machine_name'] . '>';
+      $uuid = $configuration['uuid'];
+      $markup['ng2'] = '<' . $info['machine_name'] . ' id="instance-id-' . $uuid . '">';
+      $markup['ng2'] .= '</' . $info['machine_name'] . '>';
     }
 
     $event->setMarkup($markup);

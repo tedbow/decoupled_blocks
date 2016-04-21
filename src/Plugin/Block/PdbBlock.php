@@ -1,6 +1,7 @@
 <?php
 namespace Drupal\pdb\Plugin\Block;
 
+
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -53,7 +54,7 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
     $name = $this->getDerivativeId();
     $component = $this->getPluginDefinition();
-    $markup = $this->getDerivativeMarkup($component);
+    $markup = $this->getDerivativeMarkup($component, $this->getConfiguration());
     $attached = $this->getDerivativeAttachments($component);
 
     return array(
@@ -68,12 +69,12 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * What we render server side, most likely to be taken over by client.
    */
-  public function getDerivativeMarkup($component) {
+  public function getDerivativeMarkup($component, $configuration) {
     $markup = array();
     $markup['default'] = 'This is default content';
     $key = $component['info']['presentation'];
 
-    $content_event = new ContentEvent($component, $markup);
+    $content_event = new ContentEvent($component, $configuration, $markup);
 
     $this->dispatcher->dispatch(PdbBlockEvents::CONTENT, $content_event);
 

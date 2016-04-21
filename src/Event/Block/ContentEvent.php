@@ -17,12 +17,26 @@ class ContentEvent extends BaseBlockEvent {
   /**
    * @var array
    */
+  protected $configuration;
+
+  /**
+   * @var array
+   */
   protected $markup;
 
-  public function __construct($component, array $markup) {
+  public function __construct($component, array $configuration, array $markup) {
     parent::__construct($component);
 
+    $this->configuration = $configuration;
     $this->markup = $markup;
+  }
+
+  public function getConfiguration() {
+    return $this->configuration;
+  }
+
+  public function setConfiguration(array $configuration) {
+    $this->configuration = $configuration;
   }
 
   public function getMarkup() {
