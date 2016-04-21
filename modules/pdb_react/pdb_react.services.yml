@@ -1,0 +1,15 @@
+services:
+  pdb_react.block.content:
+    class: Drupal\pdb_react\EventSubscriber\Block\SettingSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  pdb_react.block.library:
+    class: Drupal\pdb_react\EventSubscriber\Block\LibrarySubscriber
+    tags:
+      - { name: event_subscriber }
+
+  pdb_react.block.setting:
+    class: Drupal\pdb_react\EventSubscriber\Block\ContentSubscriber
+    tags:
+      - { name: event_subscriber }

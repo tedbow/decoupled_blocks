@@ -1,58 +1,6 @@
 <?php
 
 /**
- * Implements hook_pdb_markup_override().
- *
- * Specify our custom markup for react blocks.
- */
-function pdb_react_pdb_markup_override($component, $return) {
-  $info = $component['info'];
-  // Only override if presentation if react.
-  if ($info['presentation'] == 'react') {
-    $return['react'] = '<' . $info['machine_name'] . ' id="' . $info['machine_name'] . '"></' . $info['machine_name'] . '>';
-  }
-  return $return;
-}
-
-/**
- * Implements hook_pdb_settings().
- *
- * Specify our custom drupalSettings for react blocks.
- */
-function pdb_react_pdb_settings($component, $settings) {
-  $info = $component['info'];
-  // Only override if presentation if react.
-  if ($info['presentation'] == 'react') {
-    if (!isset($settings['react-apps'])) {
-      $settings['react-apps'] = array();
-    }
-    $settings['react-apps'][$info['machine_name']] = array(
-      'uri' => $info['path']
-    );
-  }
-  return $settings;
-}
-
-/**
- * Implements hook_pdb_libraries().
- *
- * Specify our custom library for react blocks.
- */
-function pdb_react_pdb_libraries($component, $libraries) {
-  $info = $component['info'];
-  // Only override if presentation if react.
-  if ($info['presentation'] == 'react') {
-    if (!isset($libraries['pdb_react/react'])) {
-      $libraries += array(
-        'pdb_react/react',
-        'pdb_react/components',
-      );
-    }
-  }
-  return $libraries;
-}
-
-/**
  * Implements hook_pdb_presentations().
  *
  * Specify our custom drupalSettings for react blocks.
