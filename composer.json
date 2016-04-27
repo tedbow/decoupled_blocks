@@ -1,5 +1,5 @@
 {
-    "name": "balsama/decoupled_blocks",
+    "name": "mrjmd/decoupled_blocks",
     "description": "Progressively Decoupled Blocks (PDB). Build stuff with javascript frameworks as blocks.",
     "type": "drupal-module",
     "license": "GPL-2.0+"
