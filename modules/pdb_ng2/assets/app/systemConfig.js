@@ -7,7 +7,7 @@ System.config({
   },
   //map tells the System loader where to look for things
   map: {
-    app: 'modules/pdb/modules/pdb_ng2/assets/app'
+    app: '/modules/pdb/modules/pdb_ng2/assets/app'
   },
   //packages defines our app package
   packages: {
