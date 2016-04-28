@@ -58,7 +58,7 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $attached = $this->getDerivativeAttachments($component);
 
     if ($contexts = $this->getContexts()) {
-      // @todo Do something to pass in contexts to 
+      // @todo Do something to pass in contexts to components
     }
     return array(
       '#markup' => $markup,
