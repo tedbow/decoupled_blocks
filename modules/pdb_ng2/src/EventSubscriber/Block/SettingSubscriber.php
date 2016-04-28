@@ -27,7 +27,7 @@ class SettingSubscriber implements EventSubscriberInterface {
         $settings['apps'] = array();
       }
       $settings['apps'][$info['machine_name']] = array(
-        'uri' => '/' . $info['path']
+        'uri' => '/' . $info['path'],
       );
     }
 

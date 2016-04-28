@@ -12,6 +12,8 @@ use Drupal\pdb\Event\Block\LibraryEvent;
 use Drupal\pdb\Event\Block\PdbBlockEvents;
 use Drupal\pdb\Event\Block\SettingEvent;
 
+use Drupal\pdb\Event\Framework\InitializeEvent;
+use Drupal\pdb\Event\Framework\PdbFrameworkEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -52,6 +54,7 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
+    $this->configuration['uuid'] = \Drupal::service('uuid')->generate();
     $name = $this->getDerivativeId();
     $component = $this->getPluginDefinition();
     $markup = $this->getDerivativeMarkup($component, $this->getConfiguration());
@@ -97,13 +100,14 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * Put together all attachments for this component.
    */
   public function getDerivativeAttachments($component) {
-    $return = array();
+    // Attach the framework needed to render the component on the client side.
+    $return = $this->attachFramework($component);
 
     // Get any necessary libraries and add them to #attached.
     $return['library'] = $this->getDerivativeLibrary($component);
 
     // Get any necessary drupalSettings and add them to #attached.
-    $return['drupalSettings'] = $this->getDerivativeSettings($component);
+    $return['drupalSettings'] += $this->getDerivativeSettings($component);
 
     // In some cases we may need to attach directly to html_head.
     $return['html_head'] = $this->getDerivativeHtmlHead($component);
@@ -112,9 +116,41 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
+   * Attaches the framework needed to render the block on the client side.
+   *
+   * @param array $component
+   *   The component definition.
+   *
+   * @return array
+   *   The attached assets.
+   */
+  public function attachFramework(array $component) {
+    if ($component['info']['presentation'] == 'ng2') {
+      $variant_blocks = array();
+      $uuid = $this->configuration['uuid'];
+      $variant_blocks[$uuid] = $component;
+
+      $initialize_event = new InitializeEvent($variant_blocks);
+
+      $this->dispatcher->dispatch(PdbFrameworkEvents::INITIALIZE, $initialize_event);
+
+      $drupalSettings = $initialize_event->getDrupalSettings();
+      if (!isset($controller_result['#attached']['drupalSettings'])) {
+        $controller_result['#attached']['drupalSettings'] = array();
+      }
+      $controller_result['#attached']['drupalSettings'] += $drupalSettings;
+
+      return $controller_result['#attached'];
+    }
+    else {
+      return array();
+    }
+  }
+
+  /**
    * Put together any libraries needed.
    */
-  public function getDerivativeLibrary($component) {
+  public function getDerivativeLibrary(array $component) {
     $libraries = array();
 
     $library_event = new LibraryEvent($component, $libraries);
@@ -131,7 +167,7 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * Put together any specific settings for exposing to the front end.
    */
-  public function getDerivativeSettings($component) {
+  public function getDerivativeSettings(array $component) {
     $settings = array();
 
     $setting_event = new SettingEvent($component, $settings);
@@ -148,7 +184,7 @@ class PdbBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * Put together any html_head attachments.
    */
-  public function getDerivativeHtmlHead($component) {
+  public function getDerivativeHtmlHead(array $component) {
     $html_head = array();
 
     $html_head_event = new HtmlHeadEvent($component, $html_head);
