@@ -3,8 +3,8 @@ import {bootstrap, BROWSER_PROVIDERS, BROWSER_APP_PROVIDERS} from 'angular2/plat
 
 import 'rxjs/add/operator/map';
 
-import {ScrollLoader} from 'modules/pdb/modules/pdb_ng2/assets/classes/scroll-loader.ts';
-import {GlobalProviders} from 'modules/pdb/modules/pdb_ng2/assets/classes/global-providers.ts';
+import {ScrollLoader} from '../classes/scroll-loader.ts';
+import {GlobalProviders} from '../classes/global-providers.ts';
 
 var injectables = drupalSettings.ng2.global_injectables;
 var globalProviders = new GlobalProviders(injectables);
